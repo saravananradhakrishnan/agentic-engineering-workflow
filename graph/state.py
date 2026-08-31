@@ -12,6 +12,21 @@ class AgentState(TypedDict, total=False):
     # Structured representation produced by Requirements Agent
     structured_requirements: Optional[Dict[str, Any]]
 
+    # Architecture Plan produced by Architecture Agent
+    architecture_plan: Optional[Dict[str, Any]]
+
+    # Security Assessment produced by Security Agent
+    security_assessment: Optional[Dict[str, Any]]
+
+    # Test Strategy produced by Test Strategy Agent
+    test_strategy: Optional[Dict[str, Any]]
+
+    # Human approval status ("APPROVED" or "REJECTED")
+    human_approval: Optional[str]
+
+    # Human feedback / rejection reason
+    human_feedback: Optional[str]
+
     # Structured build result produced by Builder Agent
     build_result: Optional[Dict[str, Any]]
 

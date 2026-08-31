@@ -42,6 +42,47 @@ class RequirementSpec(BaseModel):
     )
 
 
+class ArchitecturePlan(BaseModel):
+    """Architectural blueprint produced by Architecture Agent."""
+
+    architecture_style: str = Field(description="High-level architectural pattern or style (e.g. Modular Monolith, Layered)")
+    components: List[str] = Field(description="List of key architectural components or modules")
+    technology_choices: List[str] = Field(description="Selected frameworks, libraries, runtime environments, or tools")
+    api_design: str = Field(description="High-level specification of API interface design and structure")
+    data_flow: str = Field(description="Description of data movement, inputs/outputs, and processing pipeline")
+    design_decisions: List[str] = Field(description="Key design choices and architectural trade-offs made")
+    risks: List[str] = Field(description="Identified technical or architectural risks")
+    recommendations: List[str] = Field(description="Actionable recommendations for Builder Agent")
+
+
+class SecurityAssessment(BaseModel):
+    """Security assessment report produced by Security Agent."""
+
+    security_status: str = Field(description="Overall security status indicator (e.g. SAFE, NEEDS_REVIEW, CRITICAL)")
+    threats: List[str] = Field(description="Identified threat vectors or security attack risks")
+    input_validation: str = Field(description="Strategy for sanitization, input validation, and boundary checking")
+    authentication: str = Field(description="Authentication strategy or requirement (if applicable)")
+    authorization: str = Field(description="Authorization / access control strategy (if applicable)")
+    data_protection: str = Field(description="Data encryption, privacy, and sensitive data protection measures")
+    vulnerabilities: List[str] = Field(description="Potential security vulnerabilities or OWASP risks")
+    recommendations: List[str] = Field(description="Security recommendations and hardening steps for implementation")
+
+
+class TestStrategy(BaseModel):
+    """Comprehensive test strategy produced by Test Strategy Agent."""
+
+    __test__ = False
+
+    test_strategy: str = Field(description="Overall testing approach and philosophy")
+    functional_tests: List[str] = Field(description="Functional test scenarios to validate business logic")
+    api_tests: List[str] = Field(description="API interface and boundary test cases")
+    edge_cases: List[str] = Field(description="Boundary condition, extreme value, and edge case test scenarios")
+    negative_tests: List[str] = Field(description="Negative test cases, exception handling, and invalid inputs")
+    non_functional_tests: List[str] = Field(description="Performance, stress, or maintainability test considerations")
+    acceptance_criteria_mapping: List[str] = Field(description="Explicit mapping of test strategy to requirement acceptance criteria")
+
+
+
 class StructuredRequirements(BaseModel):
     """Parsed and refined requirements from Requirements Agent."""
 

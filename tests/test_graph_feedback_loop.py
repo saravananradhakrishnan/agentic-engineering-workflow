@@ -145,6 +145,7 @@ def test_graph_scenario_1_pass_on_first_attempt(mock_req_spec, mock_builder_resu
             "user_requirement": "Build a module",
             "iteration_count": 0,
             "max_iterations": 3,
+            "human_approval": "APPROVED",
         }
 
         final_state = graph.invoke(initial_state)
@@ -213,6 +214,7 @@ def test_graph_scenario_2_fail_then_pass(mock_req_spec, mock_builder_result):
             "user_requirement": "Build a module",
             "iteration_count": 0,
             "max_iterations": 3,
+            "human_approval": "APPROVED",
         }
 
         final_state = graph.invoke(initial_state)
@@ -267,6 +269,7 @@ def test_graph_scenario_3_fail_three_times(mock_req_spec, mock_builder_result):
             "user_requirement": "Build a module",
             "iteration_count": 0,
             "max_iterations": 3,
+            "human_approval": "APPROVED",
         }
 
         final_state = graph.invoke(initial_state)
@@ -343,6 +346,7 @@ def test_graph_scenario_4_validation_result_passed_to_next_builder(mock_req_spec
             "user_requirement": "Build a module",
             "iteration_count": 0,
             "max_iterations": 3,
+            "human_approval": "APPROVED",
         }
 
         graph.invoke(initial_state)
@@ -394,6 +398,7 @@ def test_graph_scenario_5_iteration_count_never_exceeds_max(mock_req_spec, mock_
             "user_requirement": "Build a module",
             "iteration_count": 0,
             "max_iterations": 3,
+            "human_approval": "APPROVED",
         }
 
         final_state = graph.invoke(initial_state)

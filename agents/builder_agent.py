@@ -69,6 +69,14 @@ class BuilderAgent(BaseAgent):
         else:
             spec_str = str(raw_req)
 
+        arch_plan = state.get("architecture_plan") or {}
+        sec_assess = state.get("security_assessment") or {}
+        test_strat = state.get("test_strategy") or {}
+
+        arch_str = json.dumps(arch_plan, indent=2)
+        sec_str = json.dumps(sec_assess, indent=2)
+        strat_str = json.dumps(test_strat, indent=2)
+
         workspace_dir = state.get("workspace_dir")
 
         # Check for feedback from previous validation attempt (if any)
@@ -94,7 +102,10 @@ class BuilderAgent(BaseAgent):
 
             context_prompt = (
                 "=== RETRY BUILD MODE ===\n"
-                "The previous implementation FAILED validation. Use tool outputs and feedback for code revisions:\n\n"
+                "The previous implementation FAILED validation. Use tool outputs, planning inputs, and feedback for code revisions:\n\n"
+                f"Architecture Plan:\n{arch_str}\n\n"
+                f"Security Assessment:\n{sec_str}\n\n"
+                f"Test Strategy:\n{strat_str}\n\n"
                 f"Failed Requirements:\n{json.dumps(failed_reqs, indent=2)}\n\n"
                 f"Validation Issues Identified:\n{json.dumps(issues, indent=2)}\n\n"
                 f"Actionable Recommendations:\n{json.dumps(recs, indent=2)}\n\n"
@@ -103,7 +114,13 @@ class BuilderAgent(BaseAgent):
                 "INSTRUCTION: Address all failed requirements, issues, and recommendations. Improve and fix the code rather than starting from scratch."
             )
         else:
-            context_prompt = "=== FIRST BUILD MODE ===\nConstruct a clean initial implementation based on RequirementSpec."
+            context_prompt = (
+                "=== FIRST BUILD MODE ===\n"
+                "Construct a clean initial implementation based on RequirementSpec and the following architectural, security, and testing guidance:\n\n"
+                f"Architecture Plan:\n{arch_str}\n\n"
+                f"Security Assessment:\n{sec_str}\n\n"
+                f"Test Strategy:\n{strat_str}\n"
+            )
 
         # If LLM client is configured, run structured output generation
         if self.llm is not None:
