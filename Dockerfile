@@ -1,35 +1,34 @@
-# Multistage Dockerfile for multi-agent-builder web service
-FROM python:3.12-slim as base
+FROM python:3.12-slim AS base
 
-# Set environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
     PORT=8000
 
-# Install system dependencies including curl for health checks
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set working directory
 WORKDIR /app
 
-# Copy project definition files
-COPY pyproject.toml /app/
-COPY multi_agent_builder/requirements.txt /app/multi_agent_builder/
+# Copy project definition
+COPY multi_agent_builder/pyproject.toml /app/
 
-# Install python dependencies from requirements
-RUN pip install --no-cache-dir -r multi_agent_builder/requirements.txt
+# Copy dependencies
+COPY multi_agent_builder/requirements.txt /app/requirements.txt
 
-# Copy application source code
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application
 COPY multi_agent_builder /app/multi_agent_builder
+
+# Optional: copy example environment file
 COPY .env.example /app/.env.example
 
-# Install python package itself
+# Install application
 RUN pip install --no-cache-dir -e .
 
-# Create workspace directory and non-root app user
+# Non-root user
 RUN mkdir -p /app/workspace && \
     addgroup --system appgroup && \
     adduser --system --ingroup appgroup appuser && \
@@ -37,12 +36,12 @@ RUN mkdir -p /app/workspace && \
 
 USER appuser
 
-# Expose port
 EXPOSE 8000
 
-# Health check using curl against /health endpoint
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+HEALTHCHECK --interval=30s \
+    --timeout=5s \
+    --start-period=10s \
+    --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Default command to run FastAPI app using uvicorn
 CMD ["uvicorn", "multi_agent_builder.api:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -47,8 +47,9 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
+            -f multi_agent_builder/Dockerfile \
             -t $ECR_REPOSITORY:${{ github.sha }} .
-
+  
       - name: Tag Docker image
         run: |
           docker tag \
