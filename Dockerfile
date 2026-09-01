@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS base
+FROM python:3.12-slim
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -11,24 +11,15 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-# Copy project definition
-COPY multi_agent_builder/pyproject.toml /app/
-
-# Copy dependencies
-COPY multi_agent_builder/requirements.txt /app/requirements.txt
+COPY requirements.txt .
+COPY pyproject.toml .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application
-COPY multi_agent_builder /app/multi_agent_builder
+COPY . .
 
-# Optional: copy example environment file
-COPY .env.example /app/.env.example
-
-# Install application
 RUN pip install --no-cache-dir -e .
 
-# Non-root user
 RUN mkdir -p /app/workspace && \
     addgroup --system appgroup && \
     adduser --system --ingroup appgroup appuser && \
@@ -44,4 +35,4 @@ HEALTHCHECK --interval=30s \
     --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-CMD ["uvicorn", "multi_agent_builder.api:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
