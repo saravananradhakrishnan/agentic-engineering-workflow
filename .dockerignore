@@ -1,0 +1,15 @@
+.git
+.gitignore
+.venv
+venv
+.pytest_cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.env
+workspace/
+multi_agent_builder.egg-info
+.DS_Store
+.coverage
+htmlcov/

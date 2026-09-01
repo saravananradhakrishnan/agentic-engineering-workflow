@@ -1,0 +1,28 @@
+services:
+  multi-agent-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: multi-agent-builder
+
+    ports:
+      - "8000:8000"
+
+    env_file:
+      - .env
+
+    environment:
+      LLM_PROVIDER: ${LLM_PROVIDER:-auto}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      MAX_BUILD_RETRIES: ${MAX_BUILD_RETRIES:-3}
+
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+    restart: unless-stopped
