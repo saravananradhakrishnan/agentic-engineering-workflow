@@ -36,3 +36,4 @@ HEALTHCHECK --interval=30s \
     CMD curl -f http://localhost:8000/health || exit 1
 
 CMD ["uvicorn", "multi_agent_builder.api:app", "--host", "0.0.0.0", "--port", "8000"]
+
